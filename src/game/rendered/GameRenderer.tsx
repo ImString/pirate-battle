@@ -1,7 +1,7 @@
 import { initDevtools } from '@pixi/devtools';
 import { Application, extend } from '@pixi/react';
 import { Container, ResizePlugin, Sprite, TilingSprite } from 'pixi.js';
-import { GameMap } from './GameMap';
+import { GameEngine } from './GameEngine';
 
 extend({
 	Container,
@@ -21,7 +21,7 @@ export const GameRenderer = () => {
 			extensions={[ResizePlugin]}
 			autoStart
 			sharedTicker>
-			<GameMap></GameMap>
+			<GameEngine />
 		</Application>
 	);
 };

@@ -1,6 +1,9 @@
 import { Screen } from '@/components/layout/Screen';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
+import { Game } from '@/game/entities/Game';
+import { Player } from '@/game/entities/Player';
+import { useMatchStore } from '@/game/stores/Match';
 
 import type { ScreenPage } from '@/types/global';
 
@@ -9,6 +12,20 @@ interface MainMenuScreenProps {
 }
 
 export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
+	const matchStore = useMatchStore();
+
+	const playGame = () => {
+		const newGame = new Game();
+
+		const player = new Player(500, 500);
+		newGame.addPlayer(player);
+
+		matchStore.setPlayer(player);
+		matchStore.setGame(newGame);
+
+		props.navigate('game');
+	};
+
 	return (
 		<Screen className="bg-[url(/assets/ui_scene_background.png)] bg-cover bg-center bg-no-repeat">
 			<div className="pointer-events-none absolute inset-0 bg-black/25" />
@@ -27,7 +44,7 @@ export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
 				</div>
 
 				<div className="mb-6 flex flex-col items-center gap-2">
-					<Button variant="primary" onClick={() => props.navigate('game')}>
+					<Button variant="primary" onClick={() => playGame()}>
 						Play
 					</Button>
 					<Button variant="primary" onClick={() => props.navigate('settings')}>
