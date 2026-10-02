@@ -10,9 +10,9 @@
 	"endOfLine": "auto",
 	"printWidth": 120,
 
-	"importOrder": ["^@/pages/?(.*)$", "^@/components/?(.*)$", "^@/utils/?(.*)$", "^[./]"],
+	"importOrder": ["^@/pages/?(.*)$", "^@/features/?(.*)$", "^@/shared/?(.*)$", "^[./]"],
 	"importOrderSeparation": true,
 	"importOrderParserPlugins": ["typescript", "jsx"],
 
-	"plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"]
+	"plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"]
 }
