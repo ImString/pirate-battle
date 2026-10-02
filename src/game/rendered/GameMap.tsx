@@ -22,6 +22,7 @@ export const GameMap: React.FC<GameMapProps> = props => {
 		<pixiContainer>
 			<pixiTilingSprite texture={sheet.textures['tile_73.png']} width={width} height={height} x={0} y={0} />
 
+			{/* FIRST ISLAND */}
 			<pixiSprite texture={sheet.textures['tile_56.png']} x={0} y={0} />
 			<pixiSprite texture={sheet.textures['tile_51.png']} x={-30} y={0} />
 
@@ -78,6 +79,40 @@ export const GameMap: React.FC<GameMapProps> = props => {
 
 			<pixiSprite texture={sheet.textures['tile_57.png']} x={448} y={54} />
 			<pixiSprite texture={sheet.textures['tile_41.png']} x={448} y={0} />
+
+			{/* SECOND ISLAND */}
+			<pixiSprite texture={sheet.textures['tile_41.png']} x={width - 64} y={height - 64} />
+			<pixiSprite texture={sheet.textures['tile_40.png']} x={width - 128} y={height - 64} />
+			<pixiSprite texture={sheet.textures['tile_24.png']} x={width - 128} y={height - 128} />
+			<pixiSprite texture={sheet.textures['tile_25.png']} x={width - 64} y={height - 128} />
+			<pixiSprite texture={sheet.textures['tile_9.png']} x={width - 64} y={height - 192} />
+			<pixiSprite texture={sheet.textures['tile_8.png']} x={width - 128} y={height - 192} />
+			<pixiSprite texture={sheet.textures['tile_7.png']} x={width - 192} y={height - 192} />
+			<pixiSprite texture={sheet.textures['tile_6.png']} x={width - 256} y={height - 192} />
+			<pixiSprite texture={sheet.textures['tile_22.png']} x={width - 256} y={height - 128} />
+			<pixiSprite texture={sheet.textures['tile_53.png']} x={width - 256} y={height - 64} />
+
+			<pixiSprite texture={sheet.textures['tile_23.png']} x={width - 192} y={height - 128} />
+			<pixiSprite texture={sheet.textures['tile_88.png']} x={width - 192} y={height - 128} />
+			<pixiSprite texture={sheet.textures['tile_39.png']} x={width - 192} y={height - 64} />
+			<pixiSprite texture={sheet.textures['tile_71.png']} x={width - 192} y={height - 64} />
+
+			<pixiSprite texture={sheet.textures['tile_52.png']} x={width - 384} y={height - 64} />
+			<pixiSprite texture={sheet.textures['tile_7.png']} x={width - 320} y={height - 64} />
+			<pixiSprite texture={sheet.textures['tile_67.png']} x={width - 320} y={height - 64} />
+
+			<pixiSprite texture={sheet.textures['tile_9.png']} x={width - 384} y={height - 128} />
+
+			<pixiSprite texture={sheet.textures['tile_82.png']} x={width - 384} y={height - 64} angle={-180} />
+
+			<pixiSprite texture={sheet.textures['tile_7.png']} x={width - 512} y={height - 128} />
+			<pixiSprite texture={sheet.textures['tile_7.png']} x={width - 576} y={height - 128} />
+			<pixiSprite texture={sheet.textures['tile_6.png']} x={width - 640} y={height - 128} />
+
+			<pixiSprite texture={sheet.textures['tile_24.png']} x={width - 448} y={height - 64} />
+			<pixiSprite texture={sheet.textures['tile_23.png']} x={width - 512} y={height - 64} />
+			<pixiSprite texture={sheet.textures['tile_23.png']} x={width - 576} y={height - 64} />
+			<pixiSprite texture={sheet.textures['tile_22.png']} x={width - 640} y={height - 64} />
 
 			{props.children}
 		</pixiContainer>
