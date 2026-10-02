@@ -30,15 +30,12 @@
 }
 
 .pirate-icon-button {
-	display: inline-grid;
-	height: 4rem;
-	width: 4rem;
-	place-items: center;
-	border: 0;
-	border-radius: 9999px;
 	background: url('/assets/png/default/ui/controls/button_round_normal.png') center / 100% 100% no-repeat;
-	cursor: pointer;
 	transition: transform 100ms ease;
+}
+
+.pirate-icon-button--control {
+	background-color: rgba(0, 0, 0, 0.3);
 }
 
 .pirate-icon-button:hover:not(:disabled) {
@@ -62,7 +59,7 @@
 }
 
 .pirate-icon-button__icon {
-	height: 2rem;
-	width: 2rem;
+	height: 1.5rem;
+	width: 1.5rem;
 	user-select: none;
 }

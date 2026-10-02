@@ -11,7 +11,13 @@ export const IconButton: React.FC<IconButtonProps> = props => {
 	const { iconSrc, iconAlt = '', iconClassName, className, type = 'button', ...buttonProps } = props;
 
 	return (
-		<button {...buttonProps} type={type} className={twMerge('pirate-icon-button', className)}>
+		<button
+			{...buttonProps}
+			type={type}
+			className={twMerge(
+				'pirate-icon-button inline-grid h-16 w-16 cursor-pointer place-items-center rounded-full border-0',
+				className
+			)}>
 			<img
 				src={iconSrc}
 				alt={iconAlt}
