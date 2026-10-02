@@ -1,0 +1,68 @@
+.pirate-button {
+	background-size: 100% 100%;
+	text-shadow: 0 1px 0 rgb(255 231 165 / 35%);
+}
+
+.pirate-button--primary {
+	background-image: url('/assets/png/default/ui/menu/button_primary_normal.png');
+}
+
+.pirate-button--primary:hover:not(:disabled) {
+	background-image: url('/assets/png/default/ui/menu/button_primary_hover.png');
+}
+
+.pirate-button--primary:active:not(:disabled) {
+	background-image: url('/assets/png/default/ui/menu/button_primary_pressed.png');
+	transform: translateY(2px);
+}
+
+.pirate-button--primary:disabled {
+	background-image: url('/assets/png/default/ui/menu/button_primary_disabled.png');
+}
+
+.pirate-button--secondary {
+	background-image: url('/assets/png/default/ui/menu/button_secondary_normal.png');
+}
+
+.pirate-button--secondary:active:not(:disabled) {
+	background-image: url('/assets/png/default/ui/menu/button_secondary_pressed.png');
+	transform: translateY(2px);
+}
+
+.pirate-stepper-control {
+	display: inline-grid;
+	height: 4rem;
+	width: 4rem;
+	place-items: center;
+	border: 0;
+	border-radius: 9999px;
+	background: url('/assets/png/default/ui/controls/button_round_normal.png') center / 100% 100% no-repeat;
+	cursor: pointer;
+	transition: transform 100ms ease;
+}
+
+.pirate-stepper-control:hover:not(:disabled) {
+	background-image: url('/assets/png/default/ui/controls/button_round_hover.png');
+}
+
+.pirate-stepper-control:active:not(:disabled) {
+	background-image: url('/assets/png/default/ui/controls/button_round_pressed.png');
+	transform: translateY(2px);
+}
+
+.pirate-stepper-control:focus-visible {
+	outline: 2px solid #fde68a;
+	outline-offset: 3px;
+}
+
+.pirate-stepper-control:disabled {
+	cursor: not-allowed;
+	filter: grayscale(1);
+	opacity: 0.45;
+}
+
+.pirate-stepper-control img {
+	height: 2rem;
+	width: 2rem;
+	user-select: none;
+}
