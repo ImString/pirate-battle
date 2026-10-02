@@ -1,0 +1,23 @@
+{
+	"Screen": {
+		"prefix": "custom-screen",
+		"body": [
+			"import { Screen } from '@/components/layout/Screen';",
+			"",
+			"import type { ScreenPage } from '@/types/global';",
+			"",
+			"interface ${1:Name}ScreenProps {",
+			"\tnavigate: React.Dispatch<React.SetStateAction<ScreenPage>>;",
+			"}",
+			"",
+			"export const ${1:Name}Screen: React.FC<${1:Name}ScreenProps> = props => {",
+			"\treturn (",
+			"\t\t<Screen>",
+			"\t\t\t<h1>${1:Name} Screen</h1>",
+			"\t\t</Screen>",
+			"\t);",
+			"};"
+		],
+		"description": "Create a custom Screen component"
+	}
+}

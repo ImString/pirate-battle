@@ -10,7 +10,14 @@
 	"endOfLine": "auto",
 	"printWidth": 120,
 
-	"importOrder": ["^@/pages/?(.*)$", "^@/features/?(.*)$", "^@/shared/?(.*)$", "^[./]"],
+	"importOrder": [
+		"^@/app/?(.*)$",
+		"^@/components/?(.*)$",
+		"^@/game/?(.*)$",
+		"^@/styles/?(.*)$",
+		"^@/types/?(.*)$",
+		"^[./]"
+	],
 	"importOrderSeparation": true,
 	"importOrderParserPlugins": ["typescript", "jsx"],
 

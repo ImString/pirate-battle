@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-ocean-dark: #0e2b3d;
+	--color-ocean: #1c4d6f;
+	--color-ocean-light: #2e759f;
+
+	--color-pirate-gold: #f5c542;
+	--color-pirate-wood: #6b4423;
+	--color-pirate-darkwood: #3e2410;
+	--color-pirate-parchment: #e8dcba;
+	--color-pirate-blood: #b91c1c;
+
+	--font-pirate: 'Trebuchet MS', 'Impact', sans-serif;
+}
+
+html,
+body,
+#root {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.pirate-button {
+	background-size: 100% 100%;
+	text-shadow: 0 1px 0 rgb(255 231 165 / 35%);
+}
+
+.pirate-button--primary {
+	background-image: url('/assets/png/default/ui/menu/button_primary_normal.png');
+}
+
+.pirate-button--primary:hover:not(:disabled) {
+	background-image: url('/assets/png/default/ui/menu/button_primary_hover.png');
+}
+
+.pirate-button--primary:active:not(:disabled) {
+	background-image: url('/assets/png/default/ui/menu/button_primary_pressed.png');
+	transform: translateY(2px);
+}
+
+.pirate-button--primary:disabled {
+	background-image: url('/assets/png/default/ui/menu/button_primary_disabled.png');
+}
+
+.pirate-button--secondary {
+	background-image: url('/assets/png/default/ui/menu/button_secondary_normal.png');
+}
+
+.pirate-button--secondary:active:not(:disabled) {
+	background-image: url('/assets/png/default/ui/menu/button_secondary_pressed.png');
+	transform: translateY(2px);
+}
