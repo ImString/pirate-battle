@@ -20,7 +20,14 @@ export const GameMap: React.FC<GameMapProps> = props => {
 
 	return (
 		<pixiContainer>
-			<pixiTilingSprite texture={sheet.textures['tile_73.png']} width={width} height={height} x={0} y={0} />
+			<pixiTilingSprite
+				scale={3.0}
+				texture={sheet.textures['tile_73.png']}
+				width={width}
+				height={height}
+				x={0}
+				y={0}
+			/>
 
 			{/* FIRST ISLAND */}
 			<pixiSprite texture={sheet.textures['tile_56.png']} x={0} y={0} />
