@@ -6,7 +6,7 @@ interface SettingsScreenProps {
 	navigate: React.Dispatch<React.SetStateAction<ScreenPage>>;
 }
 
-export const SettingsScreen: React.FC<SettingsScreenProps> = props => {
+export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
 	return (
 		<Screen>
 			<h1>Settings Screen</h1>

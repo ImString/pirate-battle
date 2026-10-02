@@ -6,7 +6,7 @@ interface PauseScreenProps {
 	navigate: React.Dispatch<React.SetStateAction<ScreenPage>>;
 }
 
-export const PauseScreen: React.FC<PauseScreenProps> = props => {
+export const PauseScreen: React.FC<PauseScreenProps> = () => {
 	return (
 		<Screen>
 			<h1>Pause Screen</h1>

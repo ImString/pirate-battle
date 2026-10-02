@@ -6,7 +6,7 @@ interface GameoverScreenProps {
 	navigate: React.Dispatch<React.SetStateAction<ScreenPage>>;
 }
 
-export const GameoverScreen: React.FC<GameoverScreenProps> = props => {
+export const GameoverScreen: React.FC<GameoverScreenProps> = () => {
 	return (
 		<Screen>
 			<h1>Gameover Screen</h1>

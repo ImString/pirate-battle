@@ -6,7 +6,7 @@ interface RankingScreenProps {
 	navigate: React.Dispatch<React.SetStateAction<ScreenPage>>;
 }
 
-export const RankingScreen: React.FC<RankingScreenProps> = props => {
+export const RankingScreen: React.FC<RankingScreenProps> = () => {
 	return (
 		<Screen>
 			<h1>Ranking Screen</h1>

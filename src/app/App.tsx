@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 import type { ScreenPage } from '@/types/global';
 
-const App: React.FC<{}> = () => {
+const App: React.FC = () => {
 	const [screen, setScreen] = useState<ScreenPage>('menu');
 
 	switch (screen) {
