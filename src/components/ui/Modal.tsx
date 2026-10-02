@@ -8,7 +8,10 @@ interface ModalProps {
 export const Modal: React.FC<ModalProps> = props => {
 	return (
 		<div
-			className={twMerge('relative p-8 text-white', props.className)}
+			className={twMerge(
+				'relative aspect-4/5 w-xl max-w-[calc(100vw-2rem)] shrink-0 overflow-hidden p-8 text-white',
+				props.className
+			)}
 			style={{
 				borderStyle: 'solid',
 				borderWidth: '38px 30px',

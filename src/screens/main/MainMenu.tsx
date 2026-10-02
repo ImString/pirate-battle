@@ -13,7 +13,7 @@ export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
 		<Screen className="bg-[url(/assets/ui_scene_background.png)] bg-cover bg-center bg-no-repeat">
 			<div className="pointer-events-none absolute inset-0 bg-black/25" />
 
-			<Modal className="mx-4 my-auto w-full max-w-xl">
+			<Modal className="mx-4 my-auto">
 				<div className="flex flex-col items-center gap-2">
 					<img
 						src="/assets/png/default/ui/menu/title_pirate_battle.png"
