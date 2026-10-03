@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useMatchStore } from '../stores/Match';
 import { BoatRender } from './BoatRender';
 import { GameMap } from './GameMap';
@@ -6,9 +6,16 @@ import { useTick } from '@pixi/react';
 
 export const GameEngine: React.FC = () => {
 	const matchStore = useMatchStore();
+	const setMapSize = useMatchStore(state => state.setMapSize);
 
 	const lastUpdate = useRef<number | null>(null);
 	const wasRunning = useRef(false);
+	const updateMapSize = useCallback(
+		(width: number, height: number) => {
+			setMapSize(width, height);
+		},
+		[setMapSize]
+	);
 
 	useTick(ticker => {
 		const now = performance.now();
@@ -37,7 +44,7 @@ export const GameEngine: React.FC = () => {
 	});
 
 	return (
-		<GameMap>
+		<GameMap onResize={updateMapSize}>
 			{matchStore.game?.players.map((player, index) => (
 				<BoatRender key={index} boat={player} />
 			))}

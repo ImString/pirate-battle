@@ -12,6 +12,7 @@ interface MatchState {
 	setPlayer: (player: Player | null) => void;
 	setBoatDirection: (boat: Boat, direction: MoveDirection, isActive: boolean) => void;
 	clearBoatDirections: (boat: Boat) => void;
+	setMapSize: (width: number, height: number) => void;
 	tickGame: (deltaTime: number) => void;
 	cancelMatch: () => void;
 }
@@ -35,6 +36,10 @@ export const useMatchStore = create<MatchState>()((set, get) => ({
 
 	clearBoatDirections: boat => {
 		get().game?.clearBoatDirections(boat);
+	},
+
+	setMapSize: (width, height) => {
+		get().game?.setMapSize(width, height);
 	},
 
 	tickGame: deltaTime =>

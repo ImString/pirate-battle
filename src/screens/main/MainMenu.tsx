@@ -24,8 +24,9 @@ export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
 
 	const playGame = () => {
 		const newGame = new Game();
+		newGame.setMapSize(window.innerWidth, window.innerHeight);
 
-		const player = new Player(500, 500);
+		const player = new Player(window.innerWidth * 0.55, window.innerHeight * 0.6);
 		newGame.addPlayer(player);
 
 		setPlayer(player);
