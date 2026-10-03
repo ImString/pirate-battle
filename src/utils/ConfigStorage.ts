@@ -1,6 +1,6 @@
-import type { GameConfig } from '@/types/game';
+import { resolveGameConfig } from '@/game/config';
 
-import { resolveGameConfig } from '../config';
+import type { GameConfig } from '@/types/game';
 
 export const CONFIG_STORAGE_KEY = 'pirate-battle:options';
 

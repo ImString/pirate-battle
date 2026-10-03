@@ -7,6 +7,7 @@ import { Game } from '../entities/Game';
 import { Player } from '../entities/Player';
 import { getGameViewport } from '../rendered/viewport';
 import { useStoreConfig } from './Config';
+import { useHistoryStore } from './History';
 
 interface MatchState {
 	startMatch: () => void;
@@ -85,18 +86,28 @@ export const useMatchStore = create<MatchState>()((set, get) => {
 			get().game?.setMapSize(width, height);
 		},
 
-		tickGame: deltaTime =>
-			set(state => {
-				if (!state.game || state.game.state !== 'running') return {};
-				if (discardNextTick) {
-					discardNextTick = false;
-					return {};
-				}
+		tickGame: deltaTime => {
+			const game = get().game;
+			if (!game || game.state !== 'running') return;
+			if (discardNextTick) {
+				discardNextTick = false;
+				return;
+			}
 
-				state.game.update(deltaTime);
+			game.update(deltaTime);
 
-				return { game: state.game };
-			}),
+			if (game.finishReason !== null) {
+				useHistoryStore.getState().recordMatch({
+					id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+					completedAt: new Date().toISOString(),
+					points: game.score,
+					duration: Math.floor(game.getElapsedTime() + 1e-8),
+					result: game.finishReason === 'defeat' ? 'defeated' : 'time-up'
+				});
+			}
+
+			set({ game });
+		},
 
 		player: null,
 		setPlayer: player => set({ player }),

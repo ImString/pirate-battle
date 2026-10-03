@@ -4,6 +4,7 @@ import { Screen } from '@/components/layout/Screen';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 
+import { useHistoryStore } from '@/game/stores/History';
 import { useMatchStore } from '@/game/stores/Match';
 
 import type { ScreenPage } from '@/types/global';
@@ -14,6 +15,7 @@ interface GameoverScreenProps {
 
 export const GameoverScreen: React.FC<GameoverScreenProps> = props => {
 	const matchStore = useMatchStore();
+	const historySaveFailed = useHistoryStore(state => state.historySaveFailed);
 	const isDefeat = matchStore.game?.finishReason === 'defeat';
 	const elapsedTime = Math.floor((matchStore.game?.getElapsedTime() ?? 0) + 1e-8);
 
@@ -40,6 +42,12 @@ export const GameoverScreen: React.FC<GameoverScreenProps> = props => {
 							</p>
 						</div>
 					</div>
+
+					{historySaveFailed && (
+						<p className="text-center text-xs text-amber-100">
+							This result is available this session, but could not be saved in this browser.
+						</p>
+					)}
 
 					<div className="flex w-[min(328px,max(180px,32.8vh),100%)] flex-col items-center gap-[clamp(8px,1.6vh,16px)]">
 						<Button

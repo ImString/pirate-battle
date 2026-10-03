@@ -1,9 +1,9 @@
+import { loadGameConfig, saveGameConfig } from '@/utils/ConfigStorage';
 import { create } from 'zustand';
 
 import type { GameConfig } from '@/types/game';
 
 import { resolveGameConfig } from '../config';
-import { loadGameConfig, saveGameConfig } from './ConfigStorage';
 
 interface ConfigState {
 	config: GameConfig;

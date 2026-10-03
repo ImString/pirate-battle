@@ -6,24 +6,17 @@ import { Button } from '@/components/ui/Button';
 import { IconButton } from '@/components/ui/IconButton';
 import { Modal } from '@/components/ui/Modal';
 
-import type { ScreenPage } from '@/types/global';
+import { useHistoryStore } from '@/game/stores/History';
 
-export interface HistoryEntry {
-	id: string;
-	date: string;
-	time: string;
-	points: number;
-	duration: number;
-	result: 'time-up' | 'defeated';
-}
+import type { ScreenPage } from '@/types/global';
 
 interface HistoryScreenProps {
 	navigate: React.Dispatch<React.SetStateAction<ScreenPage>>;
-	entries?: readonly HistoryEntry[];
 }
 
 const PAGE_SIZE = 5;
-const EMPTY_ENTRIES: readonly HistoryEntry[] = [];
+const dateFormatter = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const timeFormatter = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
 
 const TAB_CLASSES =
 	'compact-landscape:h-[clamp(40px,5.8dvh,58px)] compact-landscape:text-[clamp(12px,2dvh,20px)] h-[clamp(40px,5.8dvh,58px)] w-[min(234px,46%)] text-[clamp(12px,2dvh,20px)] tracking-normal [@media(max-height:450px)]:h-8!';
@@ -31,7 +24,9 @@ const PAGE_BUTTON_CLASSES = 'size-[clamp(36px,4dvh,40px)] [@media(max-height:450
 const CELL_CLASSES =
 	'h-[clamp(32px,5.1dvh,51px)] border-t border-t-transparent border-b border-b-black/20 px-[clamp(8px,0.8vw,14px)] text-[clamp(12px,1.8dvh,18px)] font-extrabold first:rounded-l-lg last:rounded-r-lg [&+td]:border-l [&+td]:border-l-[rgb(110_139_153/6%)] [@media(max-height:450px)]:h-5.5 [@media(max-height:450px)]:text-[11px]';
 
-export const HistoryScreen: React.FC<HistoryScreenProps> = ({ navigate, entries = EMPTY_ENTRIES }) => {
+export const HistoryScreen: React.FC<HistoryScreenProps> = ({ navigate }) => {
+	const entries = useHistoryStore(state => state.entries);
+	const historySaveFailed = useHistoryStore(state => state.historySaveFailed);
 	const [page, setPage] = useState(1);
 	const pageCount = Math.max(1, Math.ceil(entries.length / PAGE_SIZE));
 	const currentPage = Math.min(page, pageCount);
@@ -57,8 +52,12 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ navigate, entries 
 					</Button>
 				</nav>
 
-				<p className="text-[clamp(10px,1.4dvh,14px)] font-extrabold text-[#bfced3] uppercase [@media(max-height:450px)]:text-[10px]">
-					Capitain Jack ● Your Recent Battles
+				<p
+					role={historySaveFailed ? 'alert' : undefined}
+					className="text-center text-[clamp(10px,1.4dvh,14px)] font-extrabold text-[#bfced3] uppercase [@media(max-height:450px)]:text-[10px]">
+					{historySaveFailed
+						? 'History is available this session, but could not be saved in this browser.'
+						: 'Capitain Jack ● Your Recent Battles'}
 				</p>
 
 				<div
@@ -115,11 +114,15 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ navigate, entries 
 												: '[&>td]:bg-[rgb(10_27_38/65%)]'
 										}>
 										<td className={CELL_CLASSES}>
-											<span className="uppercase">{entry.date}</span>
-											<span className="text-[clamp(10px,1.4dvh,14px)] whitespace-nowrap text-[#aec2cc] max-[600px]:block">
-												{' '}
-												· {entry.time}
-											</span>
+											<time dateTime={entry.completedAt}>
+												<span className="uppercase">
+													{dateFormatter.format(new Date(entry.completedAt))}
+												</span>
+												<span className="text-[clamp(10px,1.4dvh,14px)] whitespace-nowrap text-[#aec2cc] max-[600px]:block">
+													{' '}
+													· {timeFormatter.format(new Date(entry.completedAt))}
+												</span>
+											</time>
 										</td>
 										<td className={`${CELL_CLASSES} text-[#ffd275]`}>{entry.points}</td>
 										<td className={CELL_CLASSES}>{formatTime(entry.duration)}</td>
