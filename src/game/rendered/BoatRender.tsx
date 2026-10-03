@@ -1,40 +1,34 @@
-import { Assets, Rectangle, Texture, type Spritesheet } from 'pixi.js';
+import { Rectangle, Texture } from 'pixi.js';
 import { useEffect, useState } from 'react';
 
 import type { Boat } from '../entities/Boat';
+import { useTextureStore } from '../stores/Texture';
 
 interface BoatRenderProps {
 	boat: Boat;
 }
 
 export const BoatRender: React.FC<BoatRenderProps> = props => {
-	const [sprite, setSprite] = useState<Spritesheet | null>(null);
-	const [hudSprite, setHudSprite] = useState<Spritesheet | null>(null);
 	const [healthFills, setHealthFills] = useState<Texture[] | null>(null);
+
+	const textureStore = useTextureStore();
 
 	useEffect(() => {
 		let active = true;
 		let fills: Texture[] = [];
 
-		const loadSprite = async () => {
-			const [ships, hud] = await Promise.all([
-				Assets.load<Spritesheet>('/assets/spritesheet/ships_miscellaneous_sheet.json'),
-				Assets.load<Spritesheet>('/assets/spritesheet/ui_sheet.json')
-			]);
-
+		const loadSprite = () => {
 			if (!active) return;
 
 			fills = ['green', 'red'].map(color => {
-				const texture = hud.textures[`enemy_health_fill_${color}`];
+				const texture = textureStore.textures.ui?.textures[`enemy_health_fill_${color}`];
 
 				return new Texture({
-					source: texture.source,
-					frame: new Rectangle(texture.frame.x + 21, texture.frame.y + 9, 118, 21)
+					source: texture?.source,
+					frame: new Rectangle((texture?.frame.x || 0) + 21, (texture?.frame.y || 0) + 9, 118, 21)
 				});
 			});
 
-			setSprite(ships);
-			setHudSprite(hud);
 			setHealthFills(fills);
 		};
 
@@ -46,7 +40,7 @@ export const BoatRender: React.FC<BoatRenderProps> = props => {
 		};
 	}, []);
 
-	if (!sprite || !props.boat.isAlive()) {
+	if (!textureStore.textures.ships || !props.boat.isAlive()) {
 		return <></>;
 	}
 
@@ -60,10 +54,19 @@ export const BoatRender: React.FC<BoatRenderProps> = props => {
 
 	return (
 		<pixiContainer x={props.boat.getPosition().x} y={props.boat.getPosition().y}>
-			<pixiSprite texture={sprite.textures[shipTexture]} anchor={0.5} rotation={props.boat.getRotation()} />
-			{props.boat.getType() !== 'player' && hudSprite && healthFills && (
+			<pixiSprite
+				texture={textureStore.textures.ships.textures[shipTexture]}
+				anchor={0.5}
+				rotation={props.boat.getRotation()}
+			/>
+			{props.boat.getType() !== 'player' && textureStore.textures.ui && healthFills && (
 				<pixiContainer y={-props.boat.getBoundaryHalfSize().y - 24}>
-					<pixiSprite texture={hudSprite.textures['enemy_health_frame']} x={-40} width={80} height={20} />
+					<pixiSprite
+						texture={textureStore.textures.ui.textures['enemy_health_frame']}
+						x={-40}
+						width={80}
+						height={20}
+					/>
 					<pixiSprite
 						texture={healthFills[healthRatio > 0.3 ? 0 : 1]}
 						x={-29.5}
