@@ -255,7 +255,12 @@ export class Game {
 
 					if (!boat) return false;
 					boat.takeDamage(projectile.getDamage());
-					if (boat instanceof Enemy && !boat.isAlive()) this.removeEnemy(boat, true);
+
+					if (boat instanceof Enemy && !boat.isAlive()) {
+						this.score += 1;
+						this.removeEnemy(boat, true);
+					}
+
 					return true;
 				}
 			);

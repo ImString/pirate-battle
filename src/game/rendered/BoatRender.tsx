@@ -59,7 +59,7 @@ export const BoatRender: React.FC<BoatRenderProps> = props => {
 				anchor={0.5}
 				rotation={props.boat.getRotation()}
 			/>
-			{props.boat.getType() !== 'player' && textureStore.textures.ui && healthFills && (
+			{textureStore.textures.ui && healthFills && (
 				<pixiContainer y={-props.boat.getBoundaryHalfSize().y - 24}>
 					<pixiSprite
 						texture={textureStore.textures.ui.textures['enemy_health_frame']}
