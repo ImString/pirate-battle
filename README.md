@@ -30,7 +30,7 @@ yarn dev --host 0.0.0.0
 
 ## Comandos
 
-Os comandos usam os scripts existentes ou os executáveis locais instalados pelo Yarn; não há scripts chamados `typecheck` ou `test:e2e`.
+Os comandos usam os scripts existentes ou os executáveis locais instalados pelo Yarn.
 
 | Objetivo                                | Comando        |
 | --------------------------------------- | -------------- |
@@ -86,17 +86,6 @@ location.reload();
 ```
 
 Para apagar somente o histórico, substitua a chave por `pirate-battle:history`. Isso remove os resultados armazenados nessa origem. Portas diferentes têm armazenamento separado.
-
-## Seleção e reset de cenários de rede
-
-Não existe simulador integrado nem parâmetro de URL para cenários. A reprodução usa as ferramentas de desenvolvimento do navegador. Esses cenários afetam os assets; ranking e histórico não fazem requisições remotas.
-
-1. Abra DevTools → **Network** e marque **Disable cache** enquanto DevTools estiver aberto.
-2. Selecione **No throttling** para a referência normal, uma conexão lenta disponível para latência ou **Offline** para indisponibilidade.
-3. Para falhas seletivas, habilite **Network request blocking** e adicione o padrão indicado abaixo antes de recarregar/iniciar a partida.
-4. Para resetar, volte a **No throttling**, desative o bloqueio de requisições e recarregue. Recarregar também limpa os caches de imagens e texturas em memória; o histórico e as opções permanecem.
-
-Manter apenas o modo Offline após o carregamento pode não produzir falha, pois os assets já estarão em memória. Focar DevTools pode pausar a partida; volte ao jogo e use **Resume** para testar gameplay.
 
 ## Como reproduzir falhas e verificar recuperação
 
