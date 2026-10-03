@@ -13,5 +13,6 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 
-	"tailwindCSS.classAttributes": ["className", "footerClassName", "iconClassName"]
+	"tailwindCSS.classAttributes": ["className", "footerClassName", "iconClassName"],
+	"css.customData": [".vscode/tailwind.css-data.json"]
 }

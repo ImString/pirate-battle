@@ -1,0 +1,17 @@
+{
+	"version": 1.1,
+	"atDirectives": [
+		{
+			"name": "@theme",
+			"description": "Define os tokens de tema do Tailwind CSS."
+		},
+		{
+			"name": "@custom-variant",
+			"description": "Define uma variante personalizada para os utilitários do Tailwind CSS."
+		},
+		{
+			"name": "@slot",
+			"description": "Indica onde os utilitários são inseridos em uma variante do Tailwind CSS."
+		}
+	]
+}

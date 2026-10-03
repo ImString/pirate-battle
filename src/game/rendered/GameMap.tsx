@@ -1,7 +1,9 @@
 import { useCanvasResize } from '@/utils';
-import { MAP_ISLANDS, getIslandOrigin } from '../map/MapLayout';
 import { Assets, type Spritesheet } from 'pixi.js';
 import { useEffect, useState } from 'react';
+
+import { MAP_ISLANDS, getIslandOrigin } from '../map/MapLayout';
+import { getGameViewport } from './viewport';
 
 interface GameMapProps {
 	children?: React.ReactNode;
@@ -11,7 +13,8 @@ interface GameMapProps {
 export const GameMap: React.FC<GameMapProps> = props => {
 	const { children, onResize } = props;
 	const [sprite, setSprite] = useState<Spritesheet | null>(null);
-	const { width, height } = useCanvasResize();
+	const dimensions = useCanvasResize();
+	const { width, height, scale } = getGameViewport(dimensions.width, dimensions.height);
 
 	useEffect(() => {
 		const loadSprite = async () => {
@@ -29,7 +32,7 @@ export const GameMap: React.FC<GameMapProps> = props => {
 	if (!sprite) return <></>;
 
 	return (
-		<pixiContainer>
+		<pixiContainer scale={scale}>
 			<pixiTilingSprite
 				scale={3.5}
 				texture={sprite.textures['tile_73.png']}

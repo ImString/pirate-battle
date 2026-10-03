@@ -22,6 +22,13 @@
 	}
 }
 
+@custom-variant compact-landscape (@media (orientation: landscape) and (max-height: 800px));
+@custom-variant compact-hud {
+	@media (max-height: 450px), (max-width: 700px) {
+		@slot;
+	}
+}
+
 html,
 body,
 #root {

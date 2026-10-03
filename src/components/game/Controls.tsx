@@ -1,6 +1,8 @@
-import { IconButton } from '../ui/IconButton';
-import { useEffect } from 'react';
+import { useEffect, type PointerEvent } from 'react';
+
 import type { MoveDirection } from '@/types/game';
+
+import { IconButton } from '../ui/IconButton';
 
 interface ControlsProps {
 	onDirectionStart: (direction: MoveDirection) => void;
@@ -48,50 +50,55 @@ export const Controls: React.FC<ControlsProps> = props => {
 	}, [onDirectionEnd, onDirectionStart, onDirectionsReset]);
 
 	const buttonControlProps = (direction: MoveDirection) => ({
-		onPointerDown: () => onDirectionStart(direction),
+		onPointerDown: (event: PointerEvent<HTMLButtonElement>) => {
+			event.preventDefault();
+			event.currentTarget.setPointerCapture(event.pointerId);
+			onDirectionStart(direction);
+		},
 		onPointerUp: () => onDirectionEnd(direction),
 		onPointerLeave: () => onDirectionEnd(direction),
-		onPointerCancel: () => onDirectionEnd(direction)
+		onPointerCancel: () => onDirectionEnd(direction),
+		onLostPointerCapture: () => onDirectionEnd(direction)
 	});
 
 	return (
-		<div className="pointer-events-none flex w-full items-end justify-between">
-			<div className="pointer-events-auto mb-14 ml-9 flex items-center gap-2">
+		<div className="game-controls pointer-events-none flex w-full items-end justify-between">
+			<div className="gap-[clamp(4px,1vw,8px)]' pointer-events-auto mx-[clamp(0px,2vw,36px)] mb-[clamp(0px,3vh,36px)] flex items-center">
 				<IconButton
 					iconSrc="/assets/png/default/ui/controls/icon_turn_left.png"
 					iconAlt="Turn Left"
-					className="pirate-icon-button--control h-17.5 w-17.5"
+					className="pirate-icon-button--control size-[clamp(48px,15vh,70px)] touch-none [-webkit-touch-callout:none]"
 					{...buttonControlProps('turn-left')}
 				/>
 				<IconButton
 					iconSrc="/assets/png/default/ui/controls/icon_forward.png"
 					iconAlt="Move Forward"
-					className="pirate-icon-button--control h-17.5 w-17.5 -translate-y-10"
+					className="pirate-icon-button--control size-[clamp(48px,15vh,70px)] translate-y-[-45%] touch-none [-webkit-touch-callout:none]"
 					{...buttonControlProps('forward')}
 				/>
 				<IconButton
 					iconSrc="/assets/png/default/ui/controls/icon_turn_right.png"
 					iconAlt="Turn Right"
-					className="pirate-icon-button--control h-17.5 w-17.5"
+					className="pirate-icon-button--control size-[clamp(48px,15vh,70px)] touch-none [-webkit-touch-callout:none]"
 					{...buttonControlProps('turn-right')}
 				/>
 			</div>
 
-			<div className="pointer-events-auto mr-9 mb-14 flex items-center gap-2">
+			<div className="gap-[clamp(4px,1vw,8px)]' pointer-events-auto mx-[clamp(0px,2vw,36px)] mb-[clamp(0px,3vh,36px)] flex items-center">
 				<IconButton
 					iconSrc="/assets/png/default/ui/controls/icon_fire_left.png"
 					iconAlt="Fire Left"
-					className="pirate-icon-button--control h-17.5 w-17.5"
+					className="pirate-icon-button--control size-[clamp(48px,15vh,70px)] touch-none [-webkit-touch-callout:none]"
 				/>
 				<IconButton
 					iconSrc="/assets/png/default/ui/controls/icon_fire_front.png"
 					iconAlt="Fire Forward"
-					className="pirate-icon-button--control h-17.5 w-17.5 -translate-y-10"
+					className="pirate-icon-button--control size-[clamp(48px,15vh,70px)] translate-y-[-45%] touch-none [-webkit-touch-callout:none]"
 				/>
 				<IconButton
 					iconSrc="/assets/png/default/ui/controls/icon_fire_right.png"
 					iconAlt="Fire Right"
-					className="pirate-icon-button--control h-17.5 w-17.5"
+					className="pirate-icon-button--control size-[clamp(48px,15vh,70px)] touch-none [-webkit-touch-callout:none]"
 				/>
 			</div>
 		</div>

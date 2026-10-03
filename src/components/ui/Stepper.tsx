@@ -38,21 +38,27 @@ export const Stepper: React.FC<StepperProps> = props => {
 
 	return (
 		<div className={twMerge('flex w-full max-w-md flex-col items-center gap-3', props.className)}>
-			{props.label && <p className="text-center text-sm font-semibold text-amber-100">{props.label}</p>}
+			{props.label && (
+				<p className="compact-landscape:min-w-16 text-center text-sm font-semibold text-amber-100">
+					{props.label}
+				</p>
+			)}
 
 			<div className="flex w-full items-center justify-between">
 				<IconButton
+					className="compact-landscape:size-11 compact-landscape:shrink-0"
 					iconSrc="/assets/png/default/ui/controls/icon_minus.png"
 					onClick={() => updateValue(currentValue - (props.step ?? 1))}
 					disabled={!canDecrease}
 					aria-label={props.label ? `Decrease ${props.label}` : 'Decrease value'}
 				/>
 
-				<p className="min-w-28 text-center text-2xl font-black text-amber-100 drop-shadow-md">
+				<p className="compact-landscape:min-w-16 min-w-28 text-center text-2xl font-black text-amber-100 drop-shadow-md">
 					{props.suffix ? `${currentValue} ${props.suffix}` : currentValue}
 				</p>
 
 				<IconButton
+					className="compact-landscape:size-11 compact-landscape:shrink-0"
 					iconSrc="/assets/png/default/ui/controls/icon_plus.png"
 					onClick={() => updateValue(currentValue + (props.step ?? 1))}
 					disabled={!canIncrease}
