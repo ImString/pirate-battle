@@ -28,6 +28,8 @@ export const BoatRender: React.FC<BoatRenderProps> = props => {
 				texture={spirte.textures[props.boat.getType() === 'player' ? 'ship_2.png' : 'ship_3.png']}
 				x={props.boat.getPosition().x}
 				y={props.boat.getPosition().y}
+				anchor={0.5}
+				rotation={props.boat.getRotation()}
 			/>
 		</pixiContainer>
 	);

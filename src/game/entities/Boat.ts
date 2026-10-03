@@ -1,9 +1,12 @@
-type MoveDirection = 'up' | 'left' | 'right';
-type BoatType = 'player' | 'shooter' | 'chaser';
+import type { BoatType, MoveDirection } from '@/types/game';
 
 export class Boat {
+	private static readonly MOVE_SPEED = 180;
+	private static readonly TURN_SPEED = Math.PI * 1.5;
+
 	private x: number = 0;
 	private y: number = 0;
+	private rotation: number = 0;
 	private health: number = 100;
 	private type: BoatType;
 
@@ -15,13 +18,16 @@ export class Boat {
 		this.health = 100;
 	}
 
-	public move(direction: MoveDirection) {
-		if (direction === 'up') {
-			this.y -= 1;
-		} else if (direction === 'left') {
-			this.x -= 1;
-		} else if (direction === 'right') {
-			this.x += 1;
+	public update(deltaTime: number, directions: ReadonlySet<MoveDirection>) {
+		const turnDirection = Number(directions.has('turn-right')) - Number(directions.has('turn-left'));
+
+		this.rotation += turnDirection * Boat.TURN_SPEED * deltaTime;
+
+		if (directions.has('forward')) {
+			const distance = Boat.MOVE_SPEED * deltaTime;
+
+			this.x -= Math.sin(this.rotation) * distance;
+			this.y += Math.cos(this.rotation) * distance;
 		}
 	}
 
@@ -35,5 +41,9 @@ export class Boat {
 
 	public getPosition() {
 		return { x: this.x, y: this.y };
+	}
+
+	public getRotation() {
+		return this.rotation;
 	}
 }

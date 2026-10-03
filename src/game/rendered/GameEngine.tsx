@@ -10,7 +10,7 @@ export const GameEngine: React.FC = () => {
 	const lastUpdate = useRef<number | null>(null);
 	const wasRunning = useRef(false);
 
-	useTick(() => {
+	useTick(ticker => {
 		const now = performance.now();
 
 		if (matchStore.game === null || matchStore.game.state !== 'running') {
@@ -24,6 +24,8 @@ export const GameEngine: React.FC = () => {
 			lastUpdate.current = now;
 			return;
 		}
+
+		matchStore.tickGame(Math.min(ticker.deltaMS / 1000, 0.1));
 
 		if (now - lastUpdate.current >= 1000) {
 			lastUpdate.current = now;
