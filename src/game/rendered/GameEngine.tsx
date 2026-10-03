@@ -1,15 +1,16 @@
-import { useCallback, useRef } from 'react';
+import { useTick } from '@pixi/react';
+import { useCallback } from 'react';
+
 import { useMatchStore } from '../stores/Match';
 import { BoatRender } from './BoatRender';
+import { ExplosionRender } from './ExplosionRender';
 import { GameMap } from './GameMap';
-import { useTick } from '@pixi/react';
+import { ProjectileRender } from './ProjectileRender';
 
 export const GameEngine: React.FC = () => {
 	const matchStore = useMatchStore();
 	const setMapSize = useMatchStore(state => state.setMapSize);
 
-	const lastUpdate = useRef<number | null>(null);
-	const wasRunning = useRef(false);
 	const updateMapSize = useCallback(
 		(width: number, height: number) => {
 			setMapSize(width, height);
@@ -18,39 +19,27 @@ export const GameEngine: React.FC = () => {
 	);
 
 	useTick(ticker => {
-		const now = performance.now();
-
-		if (matchStore.game === null || matchStore.game.state !== 'running') {
-			wasRunning.current = false;
-			lastUpdate.current = now;
-			return;
-		}
-
-		if (!wasRunning.current || lastUpdate.current === null) {
-			wasRunning.current = true;
-			lastUpdate.current = now;
-			return;
-		}
+		if (matchStore.game === null || matchStore.game.state !== 'running') return;
 
 		matchStore.tickGame(Math.min(ticker.deltaMS / 1000, 0.1));
-
-		if (now - lastUpdate.current >= 1000) {
-			lastUpdate.current = now;
-
-			if (matchStore.game.time > 0) {
-				matchStore.updateGame({ time: matchStore.game.time - 1 });
-			}
-		}
 	});
 
 	return (
 		<GameMap onResize={updateMapSize}>
-			{matchStore.game?.players.map((player, index) => (
-				<BoatRender key={index} boat={player} />
+			{matchStore.game?.players.map(player => (
+				<BoatRender key={player.getId()} boat={player} />
 			))}
 
-			{matchStore.game?.enemies.map((enemy, index) => (
-				<BoatRender key={index} boat={enemy} />
+			{matchStore.game?.enemies.map(enemy => (
+				<BoatRender key={enemy.getId()} boat={enemy} />
+			))}
+
+			{matchStore.game?.projectiles.map(projectile => (
+				<ProjectileRender key={projectile.getId()} projectile={projectile} />
+			))}
+
+			{matchStore.game?.explosions.map(explosion => (
+				<ExplosionRender key={explosion.getId()} explosion={explosion} />
 			))}
 		</GameMap>
 	);

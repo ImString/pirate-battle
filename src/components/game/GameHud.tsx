@@ -12,6 +12,10 @@ interface GameHudProps {
 
 export const GameHud: React.FC<GameHudProps> = props => {
 	const matchStore = useMatchStore();
+	const health = matchStore.player?.getHealth() ?? 0;
+	const maxHealth = matchStore.player?.getMaxHealth() ?? 100;
+	const healthPercentage = Math.max(0, Math.min(100, (health / maxHealth) * 100));
+	const healthColor = healthPercentage > 60 ? 'green' : healthPercentage > 30 ? 'amber' : 'red';
 
 	return (
 		<div className="flex w-full items-center justify-between gap-3 [--health-width:clamp(100px,20vw,208px)]">
@@ -29,16 +33,16 @@ export const GameHud: React.FC<GameHudProps> = props => {
 					)}>
 					<div
 						className="absolute inset-y-0 left-0 overflow-hidden"
-						style={{ width: `${matchStore.player?.getHealth()}%` }}>
+						style={{ width: `${healthPercentage}%` }}>
 						<img
-							src="/assets/png/default/ui/hud/health_fill_green.png"
+							src={`/assets/png/default/ui/hud/health_fill_${healthColor}.png`}
 							className="h-full w-(--health-width) max-w-none object-fill"
 							alt="Health Fill"
 						/>
 					</div>
 
 					<span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">
-						{`${matchStore.player?.getHealth()}/100`}
+						{`${health}/${maxHealth}`}
 					</span>
 				</div>
 			</div>
@@ -46,13 +50,14 @@ export const GameHud: React.FC<GameHudProps> = props => {
 				<ScoreItem icon="/assets/png/default/ui/hud/icon_score.png" score={matchStore.game?.score || 0} />
 				<ScoreItem
 					icon="/assets/png/default/ui/hud/icon_time.png"
-					score={formatTime(matchStore.game?.time || 0)}
+					score={formatTime(Math.ceil(matchStore.game?.time || 0))}
 				/>
 
 				<IconButton
 					className="size-[clamp(44px,11vh,64px)]"
 					iconSrc="/assets/png/default/ui/controls/icon_pause.png"
 					aria-label="Pause"
+					disabled={matchStore.game?.state !== 'running'}
 					onClick={props.pauseGame}
 				/>
 			</div>

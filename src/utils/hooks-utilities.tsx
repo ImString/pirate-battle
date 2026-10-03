@@ -9,16 +9,19 @@ export interface CanvasDimensions {
 }
 
 export function useCanvasResize(): CanvasDimensions {
-	const { app } = useApplication();
+	const { app, isInitialised } = useApplication();
 
 	const [dimensions, setDimensions] = useState<CanvasDimensions>(() => ({
-		width: app.screen?.width ?? window.innerWidth,
-		height: app.screen?.height ?? window.innerHeight,
-		canvasWidth: app.canvas?.width ?? window.innerWidth,
-		canvasHeight: app.canvas?.height ?? window.innerHeight
+		width: isInitialised ? app.screen.width : window.innerWidth,
+		height: isInitialised ? app.screen.height : window.innerHeight,
+		canvasWidth: isInitialised ? app.canvas.width : window.innerWidth,
+		canvasHeight: isInitialised ? app.canvas.height : window.innerHeight
 	}));
 
 	useEffect(() => {
+		if (!isInitialised) return;
+
+		const renderer = app.renderer;
 		const handleResize = () => {
 			setDimensions({
 				width: app.screen.width,
@@ -28,20 +31,16 @@ export function useCanvasResize(): CanvasDimensions {
 			});
 		};
 
-		if (app.renderer) {
-			app.renderer.on('resize', handleResize);
-		}
+		renderer.on('resize', handleResize);
 		window.addEventListener('resize', handleResize);
 
 		handleResize();
 
 		return () => {
-			if (app.renderer) {
-				app.renderer.off('resize', handleResize);
-			}
+			renderer.off('resize', handleResize);
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [app]);
+	}, [app, isInitialised]);
 
 	return dimensions;
 }
@@ -51,10 +50,7 @@ export function useStateRef<T>(initialValue: T) {
 	const stateRef = useRef<T>(initialValue);
 
 	const setState = useCallback((value: React.SetStateAction<T>) => {
-		const newState =
-			typeof value === 'function'
-				? (value as (prevState: T) => T)(stateRef.current)
-				: value;
+		const newState = typeof value === 'function' ? (value as (prevState: T) => T)(stateRef.current) : value;
 
 		stateRef.current = newState;
 		_setState(newState);

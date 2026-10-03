@@ -1,10 +1,15 @@
 import { create } from 'zustand';
+
 import type { MoveDirection } from '@/types/game';
+
 import type { Boat } from '../entities/Boat';
-import type { Game } from '../entities/Game';
-import type { Player } from '../entities/Player';
+import { Game } from '../entities/Game';
+import { Player } from '../entities/Player';
+import { getGameViewport } from '../rendered/viewport';
+import { useStoreConfig } from './Config';
 
 interface MatchState {
+	startMatch: () => void;
 	game: Game | null;
 	setGame: (game: Game | null) => void;
 	updateGame: (game: Partial<Game>) => void;
@@ -18,6 +23,18 @@ interface MatchState {
 }
 
 export const useMatchStore = create<MatchState>()((set, get) => ({
+	startMatch: () => {
+		const game = new Game(useStoreConfig.getState().config);
+		const viewport = getGameViewport(window.innerWidth, window.innerHeight);
+
+		game.setMapSize(viewport.width, viewport.height);
+
+		const player = new Player(viewport.width * 0.55, viewport.height * 0.6);
+		game.addPlayer(player);
+
+		set({ game, player });
+	},
+
 	game: null,
 
 	setGame: game => set({ game }),

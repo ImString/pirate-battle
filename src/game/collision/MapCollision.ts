@@ -47,6 +47,27 @@ export class MapCollision {
 		});
 	}
 
+	public getSize() {
+		return { width: this.width, height: this.height };
+	}
+
+	public isPathBlocked(from: Position, to: Position, radius: number) {
+		const distance = Math.hypot(to.x - from.x, to.y - from.y);
+		const steps = Math.max(1, Math.ceil(distance / 2));
+
+		for (let step = 0; step <= steps; step++) {
+			const progress = step / steps;
+			const position = {
+				x: from.x + (to.x - from.x) * progress,
+				y: from.y + (to.y - from.y) * progress
+			};
+
+			if (this.isBlocked(position, radius)) return true;
+		}
+
+		return false;
+	}
+
 	public isBlocked(position: Position, radius: number) {
 		return this.terrain.some(tile => {
 			const localX = (position.x - tile.x) / tile.scale;
@@ -99,11 +120,13 @@ export class MapCollision {
 	public findSpawnPosition(
 		preferred: Position,
 		radius: number,
-		halfSize: Position = { x: radius, y: radius }
+		halfSize: Position = { x: radius, y: radius },
+		isAllowed: (position: Position) => boolean = () => true
 	): Position | null {
 		if (this.width === 0 || this.height === 0) return null;
 
 		const isAvailable = (position: Position) =>
+			isAllowed(position) &&
 			!this.isOutsideMap(position, halfSize) &&
 			!this.isOutsideMap({ x: position.x, y: position.y + 64 }, halfSize) &&
 			!this.isBlocked(position, radius) &&

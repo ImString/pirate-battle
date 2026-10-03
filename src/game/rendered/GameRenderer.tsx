@@ -1,6 +1,7 @@
 import { initDevtools } from '@pixi/devtools';
 import { Application, extend } from '@pixi/react';
 import { Container, ResizePlugin, Sprite, TilingSprite } from 'pixi.js';
+
 import { GameEngine } from './GameEngine';
 
 extend({

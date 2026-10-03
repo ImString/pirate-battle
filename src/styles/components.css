@@ -63,3 +63,16 @@
 	width: 1.5rem;
 	user-select: none;
 }
+
+.result-panel {
+	width: min(780px, 100%, 78dvh);
+	aspect-ratio: 7 / 6;
+	border-width: clamp(22px, 3.8vh, 38px) clamp(20px, 3vh, 30px);
+	padding: clamp(8px, 2.4vh, 24px);
+}
+
+@media (max-height: 450px) {
+	.result-panel {
+		width: min(780px, 100%, calc((100dvh - 48px) * 7 / 6));
+	}
+}

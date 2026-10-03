@@ -4,9 +4,6 @@ import { Screen } from '@/components/layout/Screen';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 
-import { Game } from '@/game/entities/Game';
-import { Player } from '@/game/entities/Player';
-import { getGameViewport } from '@/game/rendered/viewport';
 import { useMatchStore } from '@/game/stores/Match';
 
 import type { ScreenPage } from '@/types/global';
@@ -16,8 +13,7 @@ interface MainMenuScreenProps {
 }
 
 export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
-	const setGame = useMatchStore(state => state.setGame);
-	const setPlayer = useMatchStore(state => state.setPlayer);
+	const startMatch = useMatchStore(state => state.startMatch);
 
 	const cancelMatch = useMatchStore(state => state.cancelMatch);
 
@@ -26,16 +22,7 @@ export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
 	}, [cancelMatch]);
 
 	const playGame = () => {
-		const newGame = new Game();
-		const viewport = getGameViewport(window.innerWidth, window.innerHeight);
-		newGame.setMapSize(viewport.width, viewport.height);
-
-		const player = new Player(viewport.width * 0.55, viewport.height * 0.6);
-		newGame.addPlayer(player);
-
-		setPlayer(player);
-		setGame(newGame);
-
+		startMatch();
 		props.navigate('game');
 	};
 
