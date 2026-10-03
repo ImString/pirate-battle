@@ -1,13 +1,13 @@
 import type { GameConfig } from '@/types/game';
 
 export const GAME_CONFIG_LIMITS = {
-	duration: { min: 30, max: 300, step: 15 },
-	enemySpawnInterval: { min: 5, max: 120, step: 5 }
+	duration: { min: 60, max: 180, step: 15 },
+	enemySpawnInterval: { min: 5, max: 30, step: 5 }
 } as const;
 
 export const DEFAULT_GAME_CONFIG: Readonly<GameConfig> = {
 	duration: 120,
-	enemySpawnInterval: 30,
+	enemySpawnInterval: 6,
 	enemySpawnDistance: 360
 };
 

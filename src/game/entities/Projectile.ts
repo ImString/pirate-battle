@@ -2,7 +2,7 @@ import type { Position } from '@/types/game';
 
 export class Projectile {
 	private static nextId = 0;
-	private static readonly SPEED = 320;
+	private static readonly SPEED = 460;
 	private static readonly COLLISION_RADIUS = 6;
 	private static readonly DAMAGE = 10;
 	private static readonly LIFETIME = 3;

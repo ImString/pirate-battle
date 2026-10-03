@@ -3,9 +3,9 @@ import type { Position } from '@/types/game';
 import { Enemy } from './Enemy';
 
 export class Shooter extends Enemy {
-	private static readonly APPROACH_SPEED = 110;
+	private static readonly APPROACH_SPEED = 130;
 	private static readonly ATTACK_RANGE = 300;
-	private static readonly SHOT_INTERVAL = 2;
+	private static readonly SHOT_INTERVAL = 1.4;
 	private static readonly AIM_TOLERANCE = Math.PI / 18;
 
 	private shotCooldown: number = Shooter.SHOT_INTERVAL;
@@ -35,6 +35,6 @@ export class Shooter extends Enemy {
 	}
 
 	protected override getStopDistance(): number {
-		return Shooter.ATTACK_RANGE * 0.8;
+		return Shooter.ATTACK_RANGE * 0.7;
 	}
 }

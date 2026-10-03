@@ -1,7 +1,7 @@
 import { Enemy } from './Enemy';
 
 export class Chaser extends Enemy {
-	private static readonly CHASE_SPEED = 140;
+	private static readonly CHASE_SPEED = 160;
 	private static readonly COLLISION_DAMAGE = 25;
 
 	constructor(startX: number, startY: number) {
