@@ -1,4 +1,5 @@
 export type MoveDirection = 'forward' | 'turn-left' | 'turn-right';
+export type AttackDirection = 'front' | 'left' | 'right';
 export type BoatType = 'player' | 'shooter' | 'chaser';
 
 export type GameState = 'running' | 'paused' | 'finished';

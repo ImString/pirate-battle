@@ -1,10 +1,10 @@
-import type { FinishReason, GameConfig, GameState, MoveDirection, Position } from '@/types/game';
+import type { AttackDirection, FinishReason, GameConfig, GameState, MoveDirection, Position } from '@/types/game';
 
 import { MapCollision } from '../collision/MapCollision';
 import { resolveGameConfig } from '../config';
 import type { Boat } from './Boat';
 import { Chaser } from './Chaser';
-import type { Enemy } from './Enemy';
+import { Enemy } from './Enemy';
 import { Explosion } from './Explosion';
 import type { Player } from './Player';
 import { Projectile } from './Projectile';
@@ -21,6 +21,8 @@ export class Game {
 	public finishReason: FinishReason | null = null;
 	public readonly config: Readonly<GameConfig>;
 	private boatDirections: Map<Boat, Set<MoveDirection>> = new Map();
+	private playerAttacks: Map<Player, Set<AttackDirection>> = new Map();
+	private pendingPlayerAttacks: Map<Player, Set<AttackDirection>> = new Map();
 	private mapCollision: MapCollision = new MapCollision();
 	private elapsedTime: number = 0;
 	private spawnElapsedTime: number = 0;
@@ -51,11 +53,15 @@ export class Game {
 
 	private clearDirections() {
 		for (const directions of this.boatDirections.values()) directions.clear();
+		for (const directions of this.playerAttacks.values()) directions.clear();
+		for (const directions of this.pendingPlayerAttacks.values()) directions.clear();
 	}
 
 	public addPlayer(player: Player) {
 		this.players.push(player);
 		this.boatDirections.set(player, new Set());
+		this.playerAttacks.set(player, new Set());
+		this.pendingPlayerAttacks.set(player, new Set());
 		this.placeBoatInWater(player);
 	}
 
@@ -81,6 +87,25 @@ export class Game {
 
 	public clearBoatDirections(boat: Boat) {
 		this.boatDirections.get(boat)?.clear();
+	}
+
+	public setPlayerAttack(player: Player, direction: AttackDirection, isActive: boolean) {
+		const attacks = this.playerAttacks.get(player);
+		if (!attacks || !this.players.includes(player)) return;
+
+		if (!isActive) {
+			attacks.delete(direction);
+			return;
+		}
+		if (this.state !== 'running' || !player.isAlive()) return;
+
+		if (!attacks.has(direction)) this.pendingPlayerAttacks.get(player)?.add(direction);
+		attacks.add(direction);
+	}
+
+	public clearPlayerAttacks(player: Player) {
+		this.playerAttacks.get(player)?.clear();
+		this.pendingPlayerAttacks.get(player)?.clear();
 	}
 
 	public setMapSize(width: number, height: number) {
@@ -154,6 +179,32 @@ export class Game {
 			);
 		}
 
+		for (const player of this.players) {
+			const attacks = this.playerAttacks.get(player);
+			const pendingAttacks = this.pendingPlayerAttacks.get(player);
+			if (!attacks || !pendingAttacks) continue;
+			if (!player.isAlive()) {
+				attacks.clear();
+				pendingAttacks.clear();
+				continue;
+			}
+
+			const activeAttacks = pendingAttacks.size > 0 ? new Set([...attacks, ...pendingAttacks]) : attacks;
+			const shots = player.updateAttacks(deltaTime, activeAttacks);
+			pendingAttacks.clear();
+			this.projectiles.push(
+				...shots.filter(
+					projectile =>
+						this.canProjectileMoveTo(projectile, projectile.getPosition()) &&
+						!this.mapCollision.isPathBlocked(
+							player.getPosition(),
+							projectile.getPosition(),
+							projectile.getCollisionRadius()
+						)
+				)
+			);
+		}
+
 		for (const enemy of [...this.enemies]) {
 			const target = this.findTarget(enemy);
 			if (!target) continue;
@@ -192,7 +243,8 @@ export class Game {
 				deltaTime,
 				position => this.canProjectileMoveTo(projectile, position),
 				position => {
-					const player = this.players.find(candidate => {
+					const targets = projectile.getOwner() === 'player' ? this.enemies : this.players;
+					const boat = targets.find(candidate => {
 						const target = candidate.getPosition();
 						return (
 							candidate.isAlive() &&
@@ -201,8 +253,9 @@ export class Game {
 						);
 					});
 
-					if (!player) return false;
-					player.takeDamage(projectile.getDamage());
+					if (!boat) return false;
+					boat.takeDamage(projectile.getDamage());
+					if (boat instanceof Enemy && !boat.isAlive()) this.removeEnemy(boat, true);
 					return true;
 				}
 			);

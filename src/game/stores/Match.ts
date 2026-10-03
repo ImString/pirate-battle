@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import type { MoveDirection } from '@/types/game';
+import type { AttackDirection, MoveDirection } from '@/types/game';
 
 import type { Boat } from '../entities/Boat';
 import { Game } from '../entities/Game';
@@ -18,6 +18,8 @@ interface MatchState {
 	setPlayer: (player: Player | null) => void;
 	setBoatDirection: (boat: Boat, direction: MoveDirection, isActive: boolean) => void;
 	clearBoatDirections: (boat: Boat) => void;
+	setPlayerAttack: (player: Player, direction: AttackDirection, isActive: boolean) => void;
+	clearPlayerAttacks: (player: Player) => void;
 	setMapSize: (width: number, height: number) => void;
 	tickGame: (deltaTime: number) => void;
 	cancelMatch: () => void;
@@ -58,7 +60,7 @@ export const useMatchStore = create<MatchState>()((set, get) => {
 			if (!game || game.state !== 'paused' || document.hidden || !document.hasFocus()) return;
 
 			game.resume();
-			// The ticker's next delta may include time spent with the tab hidden.
+
 			discardNextTick = true;
 			set({ game });
 		},
@@ -69,6 +71,14 @@ export const useMatchStore = create<MatchState>()((set, get) => {
 
 		clearBoatDirections: boat => {
 			get().game?.clearBoatDirections(boat);
+		},
+
+		setPlayerAttack: (player, direction, isActive) => {
+			get().game?.setPlayerAttack(player, direction, isActive);
+		},
+
+		clearPlayerAttacks: player => {
+			get().game?.clearPlayerAttacks(player);
 		},
 
 		setMapSize: (width, height) => {

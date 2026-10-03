@@ -8,13 +8,15 @@ export class Projectile {
 	private static readonly LIFETIME = 3;
 
 	private readonly id = Projectile.nextId++;
+	private readonly owner: 'player' | 'enemy';
 	private position: Position;
 	private direction: Position;
 	private age: number = 0;
 	private active: boolean = true;
 
-	constructor(position: Position, target: Position) {
+	constructor(position: Position, target: Position, owner: 'player' | 'enemy' = 'enemy') {
 		this.position = { ...position };
+		this.owner = owner;
 
 		const distance = Math.hypot(target.x - position.x, target.y - position.y);
 		this.direction =
@@ -59,6 +61,10 @@ export class Projectile {
 
 	public getId() {
 		return this.id;
+	}
+
+	public getOwner() {
+		return this.owner;
 	}
 
 	public getPosition() {

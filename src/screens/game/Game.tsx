@@ -7,7 +7,7 @@ import { Screen } from '@/components/layout/Screen';
 import { GameRenderer } from '@/game/rendered/GameRenderer';
 import { useMatchStore } from '@/game/stores/Match';
 
-import type { MoveDirection } from '@/types/game';
+import type { AttackDirection, MoveDirection } from '@/types/game';
 import type { ScreenPage } from '@/types/global';
 
 import { GameoverScreen } from './Gameover';
@@ -22,6 +22,8 @@ export const GameScreen: React.FC<GameScreenProps> = props => {
 	const isFinished = matchStore.game?.state === 'finished';
 	const setBoatDirection = useMatchStore(state => state.setBoatDirection);
 	const clearBoatDirections = useMatchStore(state => state.clearBoatDirections);
+	const setPlayerAttack = useMatchStore(state => state.setPlayerAttack);
+	const clearPlayerAttacks = useMatchStore(state => state.clearPlayerAttacks);
 	const pauseGame = useMatchStore(state => state.pauseGame);
 
 	useEffect(() => {
@@ -64,11 +66,24 @@ export const GameScreen: React.FC<GameScreenProps> = props => {
 		},
 		[matchStore.player, setBoatDirection]
 	);
-	const resetPlayerDirections = useCallback(() => {
+	const startPlayerAttack = useCallback(
+		(direction: AttackDirection) => {
+			if (matchStore.player) setPlayerAttack(matchStore.player, direction, true);
+		},
+		[matchStore.player, setPlayerAttack]
+	);
+	const endPlayerAttack = useCallback(
+		(direction: AttackDirection) => {
+			if (matchStore.player) setPlayerAttack(matchStore.player, direction, false);
+		},
+		[matchStore.player, setPlayerAttack]
+	);
+	const resetPlayerControls = useCallback(() => {
 		if (matchStore.player) {
 			clearBoatDirections(matchStore.player);
+			clearPlayerAttacks(matchStore.player);
 		}
-	}, [clearBoatDirections, matchStore.player]);
+	}, [clearBoatDirections, clearPlayerAttacks, matchStore.player]);
 
 	return (
 		<Screen
@@ -83,7 +98,9 @@ export const GameScreen: React.FC<GameScreenProps> = props => {
 						<Controls
 							onDirectionStart={startPlayerDirection}
 							onDirectionEnd={endPlayerDirection}
-							onDirectionsReset={resetPlayerDirections}
+							onAttackStart={startPlayerAttack}
+							onAttackEnd={endPlayerAttack}
+							onControlsReset={resetPlayerControls}
 						/>
 					)}
 				</div>
