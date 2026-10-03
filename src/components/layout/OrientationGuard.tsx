@@ -24,10 +24,7 @@ export const OrientationGuard: React.FC<OrientationGuardProps> = props => {
 	useEffect(() => {
 		if (!portrait || gameState !== 'running') return;
 
-		const match = useMatchStore.getState();
-		if (match.player) match.clearBoatDirections(match.player);
-
-		match.updateGame({ state: 'paused' });
+		useMatchStore.getState().pauseGame();
 	}, [portrait, gameState]);
 
 	return (

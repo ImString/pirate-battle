@@ -12,7 +12,8 @@ interface MatchState {
 	startMatch: () => void;
 	game: Game | null;
 	setGame: (game: Game | null) => void;
-	updateGame: (game: Partial<Game>) => void;
+	pauseGame: () => void;
+	resumeGame: () => void;
 	player: Player | null;
 	setPlayer: (player: Player | null) => void;
 	setBoatDirection: (boat: Boat, direction: MoveDirection, isActive: boolean) => void;
@@ -22,54 +23,74 @@ interface MatchState {
 	cancelMatch: () => void;
 }
 
-export const useMatchStore = create<MatchState>()((set, get) => ({
-	startMatch: () => {
-		const game = new Game(useStoreConfig.getState().config);
-		const viewport = getGameViewport(window.innerWidth, window.innerHeight);
+export const useMatchStore = create<MatchState>()((set, get) => {
+	let discardNextTick = true;
 
-		game.setMapSize(viewport.width, viewport.height);
+	return {
+		startMatch: () => {
+			const game = new Game(useStoreConfig.getState().config);
+			const viewport = getGameViewport(window.innerWidth, window.innerHeight);
 
-		const player = new Player(viewport.width * 0.55, viewport.height * 0.6);
-		game.addPlayer(player);
+			game.setMapSize(viewport.width, viewport.height);
 
-		set({ game, player });
-	},
+			const player = new Player(viewport.width * 0.55, viewport.height * 0.6);
+			game.addPlayer(player);
 
-	game: null,
+			discardNextTick = true;
+			set({ game, player });
+		},
 
-	setGame: game => set({ game }),
-	updateGame: game =>
-		set(state => {
-			if (!state.game) return {};
+		game: null,
 
-			Object.assign(state.game, game);
+		setGame: game => {
+			discardNextTick = true;
+			set({ game });
+		},
+		pauseGame: () => {
+			const game = get().game;
+			if (!game || game.state !== 'running') return;
 
-			return { game: state.game };
-		}),
+			game.pause();
+			set({ game });
+		},
+		resumeGame: () => {
+			const game = get().game;
+			if (!game || game.state !== 'paused' || document.hidden || !document.hasFocus()) return;
 
-	setBoatDirection: (boat, direction, isActive) => {
-		get().game?.setBoatDirection(boat, direction, isActive);
-	},
+			game.resume();
+			// The ticker's next delta may include time spent with the tab hidden.
+			discardNextTick = true;
+			set({ game });
+		},
 
-	clearBoatDirections: boat => {
-		get().game?.clearBoatDirections(boat);
-	},
+		setBoatDirection: (boat, direction, isActive) => {
+			get().game?.setBoatDirection(boat, direction, isActive);
+		},
 
-	setMapSize: (width, height) => {
-		get().game?.setMapSize(width, height);
-	},
+		clearBoatDirections: boat => {
+			get().game?.clearBoatDirections(boat);
+		},
 
-	tickGame: deltaTime =>
-		set(state => {
-			if (!state.game) return {};
+		setMapSize: (width, height) => {
+			get().game?.setMapSize(width, height);
+		},
 
-			state.game.update(deltaTime);
+		tickGame: deltaTime =>
+			set(state => {
+				if (!state.game || state.game.state !== 'running') return {};
+				if (discardNextTick) {
+					discardNextTick = false;
+					return {};
+				}
 
-			return { game: state.game };
-		}),
+				state.game.update(deltaTime);
 
-	player: null,
-	setPlayer: player => set({ player }),
+				return { game: state.game };
+			}),
 
-	cancelMatch: () => set({ game: null, player: null })
-}));
+		player: null,
+		setPlayer: player => set({ player }),
+
+		cancelMatch: () => set({ game: null, player: null })
+	};
+});

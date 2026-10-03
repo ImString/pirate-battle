@@ -19,9 +19,15 @@ export const GameEngine: React.FC = () => {
 	);
 
 	useTick(ticker => {
-		if (matchStore.game === null || matchStore.game.state !== 'running') return;
+		const match = useMatchStore.getState();
+		if (match.game === null || match.game.state !== 'running') return;
 
-		matchStore.tickGame(Math.min(ticker.deltaMS / 1000, 0.1));
+		if (document.hidden || !document.hasFocus()) {
+			match.pauseGame();
+			return;
+		}
+
+		match.tickGame(Math.min(ticker.deltaMS / 1000, 0.1));
 	});
 
 	return (

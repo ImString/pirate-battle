@@ -35,6 +35,24 @@ export class Game {
 		return this.elapsedTime;
 	}
 
+	public pause() {
+		if (this.state !== 'running') return;
+
+		this.state = 'paused';
+		this.clearDirections();
+	}
+
+	public resume() {
+		if (this.state !== 'paused') return;
+
+		this.clearDirections();
+		this.state = 'running';
+	}
+
+	private clearDirections() {
+		for (const directions of this.boatDirections.values()) directions.clear();
+	}
+
 	public addPlayer(player: Player) {
 		this.players.push(player);
 		this.boatDirections.set(player, new Set());
@@ -298,7 +316,7 @@ export class Game {
 	private finish(reason: FinishReason) {
 		this.state = 'finished';
 		this.finishReason = reason;
-		for (const directions of this.boatDirections.values()) directions.clear();
+		this.clearDirections();
 		if (reason === 'defeat') {
 			for (const player of this.players) this.explosions.push(new Explosion(player.getPosition()));
 		}

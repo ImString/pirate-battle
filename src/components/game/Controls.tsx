@@ -46,6 +46,7 @@ export const Controls: React.FC<ControlsProps> = props => {
 			window.removeEventListener('keydown', handleKeyDown);
 			window.removeEventListener('keyup', handleKeyUp);
 			window.removeEventListener('blur', onDirectionsReset);
+			onDirectionsReset();
 		};
 	}, [onDirectionEnd, onDirectionStart, onDirectionsReset]);
 

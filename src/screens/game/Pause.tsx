@@ -11,7 +11,7 @@ interface PauseScreenProps {
 }
 
 export const PauseScreen: React.FC<PauseScreenProps> = props => {
-	const matchStore = useMatchStore();
+	const resumeGame = useMatchStore(state => state.resumeGame);
 
 	return (
 		<Screen
@@ -28,7 +28,7 @@ export const PauseScreen: React.FC<PauseScreenProps> = props => {
 				<div className="compact-landscape:flex-row flex w-full flex-col items-center gap-2">
 					<Button
 						className="compact-landscape:min-w-0 compact-landscape:flex-1 compact-landscape:text-[clamp(16px,3vh,24px)]"
-						onClick={() => matchStore.updateGame({ state: 'running' })}>
+						onClick={resumeGame}>
 						Resume
 					</Button>
 					<Button
