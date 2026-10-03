@@ -38,7 +38,7 @@ export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
 						className="compact-landscape:max-h-[28vh] w-[min(100%,360px)] object-contain"
 					/>
 
-					<p className="compact-landscape:mb-0 compact-landscape:text-[10px] mb-6 text-xs font-black tracking-widest text-amber-200/80 uppercase">
+					<p className="compact-landscape:mb-0 compact-landscape:text-[10px] mb-6 text-center text-xs font-black tracking-widest text-amber-200/80 uppercase">
 						Set Sail. Take Command.
 					</p>
 				</div>
@@ -56,18 +56,18 @@ export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
 					<img
 						src="/assets/png/default/ships/ship_2.png"
 						alt="Ship"
-						className="compact-landscape:h-[clamp(24px,8vh,56px)] h-16 w-10 object-contain drop-shadow"
+						className="main-menu-ship compact-landscape:h-[clamp(24px,8vh,56px)] h-16 w-10 object-contain drop-shadow"
 					/>
 					<span className="text-xs font-bold tracking-wide text-amber-100/70">
 						Navigate the islands. Survive the battle.
 					</span>
 				</div>
 
-				<div className="compact-landscape:col-span-full compact-landscape:gap-4 flex justify-center gap-x-8">
-					<Button className="min-w-0 flex-1" variant="secondary" onClick={() => props.navigate('ranking')}>
+				<div className="compact-landscape:col-span-full compact-landscape:gap-4 grid grid-cols-2 justify-items-center gap-x-8">
+					<Button className="min-w-0" variant="secondary" onClick={() => props.navigate('ranking')}>
 						Ranking
 					</Button>
-					<Button className="min-w-0 flex-1" variant="secondary" onClick={() => props.navigate('history')}>
+					<Button className="min-w-0" variant="secondary" onClick={() => props.navigate('history')}>
 						Match History
 					</Button>
 				</div>

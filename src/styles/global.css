@@ -40,3 +40,8 @@ body,
 	user-select: none;
 	-webkit-user-select: none;
 }
+
+html,
+body {
+	background-color: var(--color-ocean-dark);
+}

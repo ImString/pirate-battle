@@ -29,6 +29,52 @@
 	transform: translateY(2px);
 }
 
+.main-menu .pirate-button {
+	height: auto;
+	aspect-ratio: 32 / 11;
+}
+
+.main-menu .pirate-button--primary {
+	width: min(100%, 208px);
+	font-size: 22px;
+}
+
+.main-menu .pirate-button--secondary {
+	width: min(100%, 176px);
+}
+
+@media (orientation: landscape) and (max-height: 800px) {
+	.main-menu {
+		width: min(
+			760px,
+			calc(100% - 32px),
+			calc(
+				(
+						100dvh - max(var(--screen-gap), env(safe-area-inset-top)) -
+							max(var(--screen-gap), env(safe-area-inset-bottom))
+					) *
+					1.9
+			)
+		);
+	}
+
+	.main-menu .pirate-button--primary {
+		width: min(100%, clamp(136px, 56dvh, 208px));
+		font-size: clamp(16px, 5dvh, 22px);
+	}
+
+	.main-menu .pirate-button--secondary {
+		width: min(100%, clamp(132px, 44dvh, 176px));
+		font-size: clamp(11px, 3.2dvh, 14px);
+	}
+}
+
+@media (orientation: landscape) and (max-height: 300px) {
+	.main-menu-ship {
+		display: none;
+	}
+}
+
 .pirate-icon-button {
 	background: url('/assets/png/default/ui/controls/button_round_normal.png') center / 100% 100% no-repeat;
 	transition: transform 100ms ease;
