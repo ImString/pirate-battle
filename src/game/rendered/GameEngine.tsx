@@ -7,18 +7,30 @@ import { useTick } from '@pixi/react';
 export const GameEngine: React.FC = () => {
 	const matchStore = useMatchStore();
 
-	const lastUpdate = useRef(performance.now());
+	const lastUpdate = useRef<number | null>(null);
+	const wasRunning = useRef(false);
 
 	useTick(() => {
-		if (matchStore.game === null || matchStore.game.isPaused) return;
-
 		const now = performance.now();
 
-		if (now - lastUpdate.current >= 1000) {
-			matchStore.game.time--;
-			lastUpdate.current += 1000;
+		if (matchStore.game === null || matchStore.game.state !== 'running') {
+			wasRunning.current = false;
+			lastUpdate.current = now;
+			return;
+		}
 
-			matchStore.setGame(matchStore.game);
+		if (!wasRunning.current || lastUpdate.current === null) {
+			wasRunning.current = true;
+			lastUpdate.current = now;
+			return;
+		}
+
+		if (now - lastUpdate.current >= 1000) {
+			lastUpdate.current = now;
+
+			if (matchStore.game.time > 0) {
+				matchStore.updateGame({ time: matchStore.game.time - 1 });
+			}
 		}
 	});
 

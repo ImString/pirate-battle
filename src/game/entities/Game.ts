@@ -3,12 +3,14 @@ import type { Chaser } from './Chaser';
 import type { Player } from './Player';
 import type { Shooter } from './Shooter';
 
+type GameState = 'running' | 'paused' | 'finished';
+
 export class Game {
 	public score: number = 0;
 	public time: number = 0;
 	public players: Player[] = [];
 	public enemies: Boat[] = [];
-	public isPaused: boolean = false;
+	public state: GameState = 'running';
 
 	constructor() {
 		this.score = 0;

@@ -16,7 +16,7 @@ export const Screen: React.FC<ScreenProps> = props => {
 			<div className="flex items-center justify-center">{props.children}</div>
 			<footer
 				className={twMerge(
-					'absolute right-20 bottom-2 z-20 hidden items-center gap-3 rounded-xl p-4 lg:flex',
+					'absolute right-20 bottom-2 z-10 hidden items-center gap-3 rounded-xl p-4 lg:flex',
 					props.footerClassName
 				)}>
 				<img src="/assets/logo_jungle_gaming.svg" alt="Pirate Battle Logo" className="w-40" />

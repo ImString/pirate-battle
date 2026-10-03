@@ -4,6 +4,7 @@ import { Modal } from '@/components/ui/Modal';
 import { Game } from '@/game/entities/Game';
 import { Player } from '@/game/entities/Player';
 import { useMatchStore } from '@/game/stores/Match';
+import { useEffect } from 'react';
 
 import type { ScreenPage } from '@/types/global';
 
@@ -12,7 +13,14 @@ interface MainMenuScreenProps {
 }
 
 export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
-	const matchStore = useMatchStore();
+	const setGame = useMatchStore(state => state.setGame);
+	const setPlayer = useMatchStore(state => state.setPlayer);
+
+	const cancelMatch = useMatchStore(state => state.cancelMatch);
+
+	useEffect(() => {
+		cancelMatch();
+	}, [cancelMatch]);
 
 	const playGame = () => {
 		const newGame = new Game();
@@ -20,8 +28,8 @@ export const MainMenuScreen: React.FC<MainMenuScreenProps> = props => {
 		const player = new Player(500, 500);
 		newGame.addPlayer(player);
 
-		matchStore.setPlayer(player);
-		matchStore.setGame(newGame);
+		setPlayer(player);
+		setGame(newGame);
 
 		props.navigate('game');
 	};
